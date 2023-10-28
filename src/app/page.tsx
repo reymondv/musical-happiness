@@ -4,12 +4,16 @@ import { useState, useEffect } from 'react';
 import * as Constants from './_lib/constants/spotify';
 import { getAccessToken } from './_lib/api/fetch';
 import { useRouter } from 'next/navigation';
-
+import supabase from '../../supabase';
 type SearchParamsType = {
   searchParams: {
     code: string;
     state: string;
   };
+};
+
+const featchData = async () => {
+  const { data, error } = await supabase.from('test').select();
 };
 
 function Home({ searchParams: { code, state } }: SearchParamsType) {
@@ -32,6 +36,10 @@ function Home({ searchParams: { code, state } }: SearchParamsType) {
     }
   });
 
+  const insertData = async (data: string) => {
+    await supabase.from('tasks').insert([{ description: data }]);
+  };
+
   return (
     <main className='flex min-h-screen flex-row items-end justify-between p-24'>
       <div className='z-10 max-w-5xl w-full items-center justify-end font-mono text-sm lg:flex text-center'>
@@ -42,6 +50,7 @@ function Home({ searchParams: { code, state } }: SearchParamsType) {
           Login to Spotify
         </a>
       </div>
+      <button onClick={() => insertData('msg')}>test button</button>
     </main>
   );
 }
